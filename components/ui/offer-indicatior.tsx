@@ -1,22 +1,32 @@
 "use client";
 
 import React from "react";
-import { useMessages } from "@/app/context/message-provider";
+import { useNotificationsStore } from "@/stores/notifications-store";
 
-type Props = {};
+interface OfferIndicatorProps {
+	className?: string;
+}
 
-const OfferIndicatior = (props: Props) => {
-  const { offers, messages, offerMessages } = useMessages();
+const OfferIndicator = ({ className = "" }: OfferIndicatorProps) => {
+	// Get notification data from the Zustand store
+	const { offers, messages, offerMessages } = useNotificationsStore();
 
-  return (
-    <>
-      {offers.length + messages.length + offerMessages.length > 0 && (
-        <div className="absolute z-10 top-0 right-3 w-5 text-[10px] font-semibold h-5 flex justify-center text-white items-center bg-red-500 rounded-full">
-          {offers.length + messages.length + offerMessages.length}
-        </div>
-      )}
-    </>
-  );
+	// Calculate total unread notifications
+	const totalNotifications =
+		offers.length + messages.length + offerMessages.length;
+
+	// Only render if there are notifications
+	if (totalNotifications === 0) {
+		return null;
+	}
+
+	return (
+		<div
+			className={`absolute z-10 -top-2 -right-2 w-5 text-[10px] font-semibold h-5 flex justify-center text-white items-center bg-red-500 rounded-full ${className}`}
+		>
+			{totalNotifications}
+		</div>
+	);
 };
 
-export default OfferIndicatior;
+export default OfferIndicator;

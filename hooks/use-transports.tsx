@@ -57,10 +57,12 @@ export function useTransports() {
 				description: "Transport został dodany",
 			});
 		},
-		onError: (error) => {
+		onError: (error: unknown) => {
+			const errorMessage =
+				error instanceof Error ? error.message : "Wystąpił nieznany błąd";
 			toast({
 				title: "Błąd",
-				description: error.message,
+				description: errorMessage,
 				variant: "destructive",
 			});
 		},

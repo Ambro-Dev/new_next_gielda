@@ -42,6 +42,7 @@ export async function GET(req: NextRequest) {
 		}
 
 		return NextResponse.json({ transports, status: 200 });
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	} catch (error: any) {
 		return NextResponse.json({ error: error.message }, { status: 500 });
 	}
@@ -152,6 +153,7 @@ export async function POST(req: NextRequest) {
 			transportId: transport.id,
 			status: 201,
 		});
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	} catch (error: any) {
 		return NextResponse.json({ error: error.message }, { status: 500 });
 	}

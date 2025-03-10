@@ -23,6 +23,7 @@ export default function ConversationPage({
 	const { toast } = useToast();
 
 	// Przewijanie do najnowszej wiadomości
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
 	}, [messages]);

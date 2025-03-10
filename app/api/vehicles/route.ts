@@ -53,7 +53,7 @@ export async function GET(req: NextRequest) {
 					: vehicle.type.includes("tanker")
 						? vehicle.size.width
 						: vehicle.size.length,
-			userId: vehicle.users.id,
+			userId: vehicle.users[0].id,
 			createdAt: vehicle.created_at,
 			updatedAt: vehicle.updated_at,
 			description: vehicle.description,
@@ -64,8 +64,9 @@ export async function GET(req: NextRequest) {
 		}));
 
 		return NextResponse.json(vehiclesTable, { status: 200 });
-	} catch (error: any) {
-		return NextResponse.json({ error: error.message }, { status: 500 });
+	} catch (error: unknown) {
+		const errorMessage = error instanceof Error ? error.message : String(error);
+		return NextResponse.json({ error: errorMessage }, { status: 500 });
 	}
 }
 
@@ -119,7 +120,8 @@ export async function POST(req: NextRequest) {
 			{ message: "Pojazd został dodany" },
 			{ status: 200 },
 		);
-	} catch (error: any) {
-		return NextResponse.json({ error: error.message }, { status: 500 });
+	} catch (error: unknown) {
+		const errorMessage = error instanceof Error ? error.message : String(error);
+		return NextResponse.json({ error: errorMessage }, { status: 500 });
 	}
 }

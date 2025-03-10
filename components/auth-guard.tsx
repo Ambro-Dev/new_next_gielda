@@ -17,7 +17,7 @@ export function AuthGuard({ children, requiredRole }: AuthGuardProps) {
 
 	useEffect(() => {
 		if (!isLoading && !user) {
-			router.push(`/signin?redirect=${encodeURIComponent(pathname)}`);
+			router.push(`/signin?redirect=${encodeURIComponent(pathname ?? "/")}`);
 		}
 
 		if (!isLoading && user && requiredRole) {

@@ -16,9 +16,11 @@ import React, { useEffect, useState } from "react";
 import { Menu, Facebook } from "lucide-react";
 import MobileNavMenu from "./MobileNavMenu";
 import DesktopNavMenu from "./DesktopNavMenu";
-import OfferIndicatior from "@/components/ui/offer-indicatior";
-import { useSchoolData } from "@/hooks/use-school-data";
+import OfferIndicator from "./ui/offer-indicatior";
+import { useSchoolData } from "@/hooks/use-supabase-query"; // Updated import
+import { useIsMobile } from "@/hooks/use-mobile"; // Use our hook for mobile detection
 
+// Admin menu items definition
 const menu: { title: string; href: string; description: string }[] = [
 	{
 		title: "Zarządzaj szkołami",
@@ -46,22 +48,10 @@ const menu: { title: string; href: string; description: string }[] = [
 ];
 
 const TopBar = () => {
-	const [isMobile, setIsMobile] = useState<boolean>(false);
-	const { data: school } = useSchoolData();
-
-	const handleResize = () => {
-		if (window.innerWidth < 1024) {
-			setIsMobile(true);
-		} else {
-			setIsMobile(false);
-		}
-	};
-
-	useEffect(() => {
-		handleResize();
-		window.addEventListener("resize", handleResize);
-		return () => window.removeEventListener("resize", handleResize);
-	}, []);
+	// Use our custom hook for mobile detection
+	const isMobile = useIsMobile();
+	// Get school data from our custom hook
+	const { data: school, isLoading: schoolLoading } = useSchoolData();
 
 	return (
 		<div className="fixed w-full sm:px-10 px-5 bg-white backdrop-blur-sm bg-opacity-80 shadow-md z-10">
@@ -70,13 +60,13 @@ const TopBar = () => {
 					<Sheet>
 						<SheetTrigger asChild>
 							<div className="relative lg:hidden">
-								<OfferIndicatior />
-								<button className="w-10 h-10 mr-4">
+								<OfferIndicator />
+								<button className="w-10 h-10 mr-4" type="button">
 									<Menu size={36} />
 								</button>
 							</div>
 						</SheetTrigger>
-						<SheetContent side={"left"} className="overflow-y-auto">
+						<SheetContent side="left" className="overflow-y-auto">
 							<SheetHeader>
 								<SheetTitle>
 									<Link href="/" legacyBehavior passHref>
@@ -116,13 +106,9 @@ const TopBar = () => {
 				</div>
 			</div>
 			<Separator />
-			<div
-				style={
-					isMobile
-						? { display: "none" }
-						: { display: "flex", flexDirection: "row" }
-				}
-			>
+
+			{/* Desktop navigation - hidden on mobile */}
+			{!isMobile && (
 				<div className="flex flex-row justify-end gap-12 w-full py-3 bg-transparent">
 					<DesktopNavMenu school={school} menu={menu} />
 					<div className="flex flex-row justify-center items-center gap-4">
@@ -131,7 +117,7 @@ const TopBar = () => {
 						</Link>
 					</div>
 				</div>
-			</div>
+			)}
 		</div>
 	);
 };

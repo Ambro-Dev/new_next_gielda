@@ -47,6 +47,7 @@ export default function SignIn() {
 			});
 
 			router.push("/transport");
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		} catch (error: any) {
 			toast({
 				title: "Wystąpił błąd",
